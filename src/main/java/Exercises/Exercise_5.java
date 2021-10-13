@@ -12,29 +12,34 @@ public class Exercise_5
         ExpressionsBasedModel model = new ExpressionsBasedModel();
 
         /* 1. Defining the variables */
-        //Maximize = 3x + 4y
-        Variable X = model.addVariable("X").weight(3);
-        Variable Y = model.addVariable("Y").weight(4);
+        //Maximize = x + y
+        Variable X = model.addVariable("Phones").weight(1);
+        Variable Y = model.addVariable("Tablets").weight(1);
 
         /* 2. Constraints */
-        // x + y2 <= 14
-        Expression constraint_1 = model.addExpression("Constraint 1")
-                .upper(14) // Less or equal: Use upper
-                .set(X, 1)
-                .set(Y, 2);
+        // 50x + 24y <= 2400
+        Expression constraint_1 = model.addExpression("Process time, machine A")
+                .upper(2400)
+                .set(X, 50)
+                .set(Y, 24);
 
-        //3x - y >= 0
-        Expression constraint_2 = model.addExpression("Constraint 2")
-                .lower(0) // Higher or equal: Use lower
-                .set(X, 3)
-                .set(Y, -1);
+        //30x + 33y <= 2100
+        Expression constraint_2 = model.addExpression("Process time, machine B")
+                .upper(2100)
+                .set(X, 30)
+                .set(Y, 33);
 
-        //x -y <= 2
-        Expression constraint_3 = model.addExpression("Constraint 3")
-                .upper(2)
-                .set(X, 1)
-                .set(Y, -1);
+        //x => 75 - 30   (x + 30 - 75)
+        Expression constraint_3 = model.addExpression("X amount produced")
+                .lower(45)
+                .set(X, 1);
 
+        //y => 95 - 90   (y + 90 - 95)
+        Expression constraint_4 = model.addExpression("Y amount produced")
+                .lower(5)
+                .set(Y, 1);
+
+        // (x + 30 - 75) + (y + 90 - 95) = (x + y - 50)
         Optimisation.Result result = model.maximise();
 
         System.out.println("\nResult: " + result);
